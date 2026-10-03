@@ -9,6 +9,7 @@ interface HeaderProps {
   onOpenNotifications?: () => void;
   onOpenContactModal?: () => void;
   onOpenCvModal?: () => void;
+  onOpenVeoModal?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -19,9 +20,11 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenNotifications,
   onOpenContactModal,
   onOpenCvModal,
+  onOpenVeoModal,
 }) => {
   const navItems = [
     { id: 'works', label: 'Works & Research' },
+    { id: 'veo', label: 'Veo Video', isBadge: 'AI' },
     { id: 'crate', label: '3D Project Crate', isBadge: '3D' },
     { id: 'video', label: 'Live AIoT Video' },
     { id: 'youtube', label: 'YouTube (@pjt247)', isSpecial: true },
@@ -61,6 +64,8 @@ export const Header: React.FC<HeaderProps> = ({
                 onClick={() => {
                   if (item.id === 'cv' && onOpenCvModal) {
                     onOpenCvModal();
+                  } else if (item.id === 'veo' && onOpenVeoModal) {
+                    onOpenVeoModal();
                   } else {
                     onSelectNav(item.id);
                   }

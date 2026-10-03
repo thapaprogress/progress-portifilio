@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
 import { DeveloperProfile, PeerReviewedPaper } from '../types/portfolio';
+import { ProgressAvatar } from './ProgressAvatar';
 import { X, Printer, Download, CheckCircle2, FileText, ExternalLink, ShieldCheck } from 'lucide-react';
 
 interface CurriculumVitaeModalProps {
@@ -94,11 +95,12 @@ export const CurriculumVitaeModal: React.FC<CurriculumVitaeModalProps> = ({
                 </div>
               </div>
 
-              {/* Signature / Seal Box */}
-              <div className="p-3 flex flex-col items-center justify-center bg-white text-center">
-                <div className="w-20 h-20 rounded-full border border-dashed border-[#94A3B8] flex items-center justify-center text-[10px] text-[#64748B] font-serif">
-                  Signature /<br />Seal
+              {/* Official Passport Photo Box */}
+              <div className="p-3 flex flex-col items-center justify-center bg-white text-center gap-1.5">
+                <div className="w-20 h-24 border border-[#CBD5E1] rounded overflow-hidden shadow-xs flex items-center justify-center bg-white">
+                  <ProgressAvatar size="md" showBadge={false} />
                 </div>
+                <span className="text-[9px] font-mono text-[#64748B]">Official Photo (35x45mm)</span>
               </div>
             </div>
           </div>

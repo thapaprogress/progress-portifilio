@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { DeveloperProfile, FeaturedStackItem } from '../types/portfolio';
 import { GithubHeatmap } from './GithubHeatmap';
+import { ProgressAvatar } from './ProgressAvatar';
+import { VeoVideoShowcaseCard } from './VeoVideoShowcaseCard';
 import {
   MapPin,
   Mail,
@@ -22,6 +24,7 @@ import {
   Download,
   Disc,
   Youtube,
+  Film,
 } from 'lucide-react';
 
 interface DeveloperSidebarProps {
@@ -37,6 +40,9 @@ interface DeveloperSidebarProps {
   onOpenVideoModal?: () => void;
   onNavigateToCrate?: () => void;
   onNavigateToYoutube?: () => void;
+  onOpenVeoStudio?: () => void;
+  veoVideoUrl?: string | null;
+  customAvatarUrl?: string | null;
 }
 
 export const DeveloperSidebar: React.FC<DeveloperSidebarProps> = ({
@@ -52,6 +58,9 @@ export const DeveloperSidebar: React.FC<DeveloperSidebarProps> = ({
   onOpenVideoModal,
   onNavigateToCrate,
   onNavigateToYoutube,
+  onOpenVeoStudio,
+  veoVideoUrl,
+  customAvatarUrl,
 }) => {
   const [filterQuery, setFilterQuery] = useState('');
 
@@ -69,16 +78,11 @@ export const DeveloperSidebar: React.FC<DeveloperSidebarProps> = ({
         {/* Avatar & Verification Header */}
         <div className="flex items-start justify-between gap-4">
           <div className="relative">
-            {/* Developer Avatar Frame */}
-            <div className="w-20 h-20 rounded-full border-2 border-[#1B4332] p-0.5 bg-[#FAF8F5] overflow-hidden shadow-xs">
-              <div className="w-full h-full rounded-full bg-[#183626] flex items-center justify-center text-[#FAF8F5] font-serif font-bold text-2xl relative overflow-hidden">
-                <span className="relative z-10 text-[#FAF8F5] font-serif tracking-tight">PT</span>
-                <svg className="absolute inset-0 w-full h-full opacity-20 text-white fill-none stroke-current" viewBox="0 0 100 100">
-                  <circle cx="50" cy="50" r="30" strokeWidth="1" strokeDasharray="3 3" />
-                  <path d="M20,50 L80,50 M50,20 L50,80" strokeWidth="0.8" />
-                </svg>
-              </div>
-            </div>
+            <ProgressAvatar
+              avatarUrl={customAvatarUrl}
+              onOpenVideoStudio={onOpenVeoStudio}
+              size="md"
+            />
 
             {profile.academicHistory && (
               <div
@@ -232,8 +236,26 @@ export const DeveloperSidebar: React.FC<DeveloperSidebarProps> = ({
           <GithubHeatmap compact={true} />
         </div>
 
+        {/* Veo Living Portrait Video Showcase Card */}
+        <div className="mt-4 pt-3.5 border-t border-[#F0ECE1]">
+          <VeoVideoShowcaseCard
+            onOpenVideoStudio={onOpenVeoStudio || (() => {})}
+            videoUrl={veoVideoUrl}
+          />
+        </div>
+
         {/* Official CV & Contact Action Buttons */}
         <div className="mt-4 pt-3 border-t border-[#F0ECE1] space-y-2">
+          {onOpenVeoStudio && (
+            <button
+              onClick={onOpenVeoStudio}
+              className="w-full py-2 bg-[#F0FDF4] hover:bg-[#DCFCE7] border border-[#BBF7D0] text-[#166534] text-xs font-semibold rounded-lg transition-colors flex items-center justify-center gap-1.5 shadow-xs"
+            >
+              <Film className="w-3.5 h-3.5 text-[#16A34A]" />
+              <span>Animate Photo into Video (Veo)</span>
+            </button>
+          )}
+
           <button
             onClick={onOpenCvModal}
             className="w-full py-2 bg-[#FAF8F5] hover:bg-[#F2ECE1] border border-[#CBD5E1] text-[#14261C] text-xs font-semibold rounded-lg transition-colors flex items-center justify-center gap-1.5 shadow-xs"

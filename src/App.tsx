@@ -20,6 +20,9 @@ import { ProjectCrateCarousel } from './components/ProjectCrateCarousel';
 import { GatefoldScrollWorld } from './components/GatefoldScrollWorld';
 import { YouTubeChannelView } from './components/YouTubeChannelView';
 import { FuturisticVisualHeroImage } from './components/FuturisticVisualHeroImage';
+import { VeoVideoStudioModal } from './components/VeoVideoStudioModal';
+import { VeoVideoStudioView } from './components/VeoVideoStudioView';
+import { VeoVideoShowcaseCard } from './components/VeoVideoShowcaseCard';
 
 import {
   developerProfile,
@@ -38,7 +41,7 @@ import {
   AchievementBadge,
   ResearchCollaborator,
 } from './types/portfolio';
-import { Play, Sparkles, FileText, Video, Disc } from 'lucide-react';
+import { Play, Sparkles, FileText, Video, Disc, Film } from 'lucide-react';
 
 export default function App() {
   const [profile, setProfile] = useState(developerProfile);
@@ -59,6 +62,9 @@ export default function App() {
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
   const [isCvModalOpen, setIsCvModalOpen] = useState(false);
   const [activeGatefoldRelease, setActiveGatefoldRelease] = useState<ProjectSleeveRelease | null>(null);
+  const [isVeoStudioOpen, setIsVeoStudioOpen] = useState(false);
+  const [veoVideoUrl, setVeoVideoUrl] = useState<string | null>(null);
+  const [customAvatarUrl, setCustomAvatarUrl] = useState<string | null>(null);
 
   // Visual Lightbox state
   const [lightboxState, setLightboxState] = useState<{
@@ -175,6 +181,7 @@ export default function App() {
         onOpenNotifications={() => setIsNotificationsOpen(true)}
         onOpenContactModal={() => setIsContactModalOpen(true)}
         onOpenCvModal={() => setIsCvModalOpen(true)}
+        onOpenVeoModal={() => setIsVeoStudioOpen(true)}
       />
 
       {/* Main Container */}
@@ -278,6 +285,15 @@ export default function App() {
         {/* If Active Tab is 'youtube' */}
         {activeNav === 'youtube' && <YouTubeChannelView />}
 
+        {/* If Active Tab is 'veo' */}
+        {activeNav === 'veo' && (
+          <VeoVideoStudioView
+            initialImage={customAvatarUrl}
+            currentVideoUrl={veoVideoUrl}
+            onVideoCreated={(url) => setVeoVideoUrl(url)}
+          />
+        )}
+
         {/* Default 'works' Tab: The 3-Column Dashboard Layout */}
         {activeNav === 'works' && (
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
@@ -296,6 +312,9 @@ export default function App() {
                 onOpenVideoModal={() => setActiveNav('video')}
                 onNavigateToCrate={() => setActiveNav('crate')}
                 onNavigateToYoutube={() => setActiveNav('youtube')}
+                onOpenVeoStudio={() => setIsVeoStudioOpen(true)}
+                veoVideoUrl={veoVideoUrl}
+                customAvatarUrl={customAvatarUrl}
               />
             </div>
 
@@ -306,6 +325,43 @@ export default function App() {
                 currentStreakWeeks={profile.activeStreakWeeks}
                 onLogClick={() => setIsLogModalOpen(true)}
               />
+
+              {/* Living Portrait Video Showcase Card with Veo */}
+              <div className="bg-[#050D08] rounded-2xl border border-[#1B4332] p-4 text-[#FAF8F5] shadow-md space-y-3">
+                <div className="flex items-center justify-between gap-3">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-lg bg-[#22C55E]/20 text-[#22C55E] flex items-center justify-center">
+                      <Film className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <h4 className="text-sm font-bold text-white">
+                          Progress Thapa — Living Portrait Video
+                        </h4>
+                        <span className="px-1.5 py-0.2 rounded text-[10px] font-mono bg-[#142C1F] text-[#86EFAC] border border-[#2D5A27]">
+                          Veo 3.1
+                        </span>
+                      </div>
+                      <p className="text-[11px] text-[#A7F3D0]">
+                        Generated with Google Veo (<code className="text-[#86EFAC]">veo-3.1-fast-generate-preview</code>)
+                      </p>
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={() => setIsVeoStudioOpen(true)}
+                    className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#22C55E] hover:bg-[#16A34A] text-black transition-colors flex items-center gap-1.5 shrink-0"
+                  >
+                    <Sparkles className="w-3.5 h-3.5" />
+                    <span>Open Veo Studio</span>
+                  </button>
+                </div>
+
+                <VeoVideoShowcaseCard
+                  onOpenVideoStudio={() => setIsVeoStudioOpen(true)}
+                  videoUrl={veoVideoUrl}
+                />
+              </div>
 
               {/* Animated & Responsive Futuristic Cybernetic Architecture Image Viewport */}
               <FuturisticVisualHeroImage
@@ -476,6 +532,16 @@ export default function App() {
       <NotificationsModal
         isOpen={isNotificationsOpen}
         onClose={() => setIsNotificationsOpen(false)}
+      />
+
+      {/* Veo Video Generation Studio Modal */}
+      <VeoVideoStudioModal
+        isOpen={isVeoStudioOpen}
+        onClose={() => setIsVeoStudioOpen(false)}
+        initialImage={customAvatarUrl}
+        onVideoCreated={(url) => {
+          setVeoVideoUrl(url);
+        }}
       />
 
       {/* Cinematic 3D Gatefold Scroll World inside each project */}
